@@ -10,7 +10,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
     hibernate:
-      ddl-auto: create
+      ddl-auto:
     properties:
       hibernate:
         # show_sql: true

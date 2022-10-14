@@ -2,11 +2,13 @@ package com.example.mythymleaf.controller;
 
 import com.example.mythymleaf.model.Board;
 import com.example.mythymleaf.repository.BoardRepository;
+import com.example.mythymleaf.service.BoardService;
 import com.example.mythymleaf.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,10 +24,12 @@ public class BoardController {
     private BoardRepository boardRepository;
 
     @Autowired
+    private BoardService boardService;
+    @Autowired
     private BoardValidator boardValidator;
 
     @GetMapping("/list")
-    public String list(Model model, @PageableDefault(size = 1) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
+    public String list(Model model, @PageableDefault(size = 2) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
         //Page<Board> boards = boardRepository.findAll(pageable);
         Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText, searchText, pageable);
         int startPage = Math.max(1, boards.getPageable().getPageNumber() - 4); //Math.max()함수는 두 인자 값 중 큰 값을 리턴하는 함수.
@@ -48,14 +52,16 @@ public class BoardController {
     }
 
     @PostMapping("/form")
-    public String greetingSubmit(@Valid Board board, BindingResult bindingResult) {
+    public String postForm(@Valid Board board, BindingResult bindingResult, Authentication authentication) {
 
         boardValidator.validate(board, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "board/form";
         }
-        boardRepository.save(board);
+        String userName = authentication.getName(); //스프링에서 제공하는 security 를 이용하여 인증정보를 가지고 올 수 있다.
+        boardService.save(userName, board);
+        //boardRepository.save(board);
         return "redirect:/board/list";
     }
 }

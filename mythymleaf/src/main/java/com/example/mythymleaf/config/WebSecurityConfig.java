@@ -26,8 +26,9 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/","/account/register","/css/**").permitAll() //권한 없이 접근 가능한 페이지를 설정한다.
+                        .antMatchers("/","/account/register","/css/**","/api/**","/logout").permitAll() //권한 없이 접근 가능한 페이지를 설정한다.
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

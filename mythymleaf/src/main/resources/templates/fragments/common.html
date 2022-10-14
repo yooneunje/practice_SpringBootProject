@@ -47,9 +47,9 @@
                 </li> -->
             </ul>
 
-            <a class="btn btn-secondary my-2 mr-2 my-sm-0" type="submit" th:href="@{/accout/login}"
+            <a class="btn btn-secondary my-2 mr-2 my-sm-0" type="submit" th:href="@{/account/login}"
                 sec:authorize="!isAuthenticated()">로그인</a>
-            <a class="btn btn-secondary my-2 my-sm-0" type="submit" th:href="@{/accout/register}"
+            <a class="btn btn-secondary my-2 my-sm-0" type="submit" th:href="@{/account/register}"
                 sec:authorize="!isAuthenticated()">회원가입</a>
 
             <form class="form-inline my-2 my-lg-0" th:action="@{/logout}" method="post"
